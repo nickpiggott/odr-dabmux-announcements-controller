@@ -1,5 +1,5 @@
-# dab-odrmux-announcements-controller
-A PHP Script to control announcements on dab-odrmux
+# odr-dabmux-announcements-controller
+A PHP Script to control announcements on odr-dabmux
 
 odr-dabmux is a open source implementation of a multiplexer for DAB / DAB+ Digital Radio (based on EN 300 401). Since version 0.8.0,
 dab-odrmux has supported definition and control of announcement clusters. (See http://opendigitalradio.org)
