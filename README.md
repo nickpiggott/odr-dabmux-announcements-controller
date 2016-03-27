@@ -2,7 +2,7 @@
 A PHP Script to control announcements on odr-dabmux
 
 odr-dabmux is a open source implementation of a multiplexer for DAB / DAB+ Digital Radio (based on EN 300 401). Since version 0.8.0,
-dab-odrmux has supported definition and control of announcement clusters. (See http://opendigitalradio.org)
+odr-dabmux has supported definition and control of announcement clusters. (See http://opendigitalradio.org)
 
 An HTTP server can be installed on the same machine as odr-dabmux, to host this PHP script. The HTTP must currently be on the same
 machine as odr-dabmux only allows local connections (127.0.0.1) to its interface. You might want to consider Apache or something
@@ -30,7 +30,7 @@ on line 6 of the PHP script. So in this example, amend line 6 to read
 
   $announcement_command_suffix = "_announcement";
   
-The IP address and port of the target are preconfigured to match the defaults on dab-odrmux. Remember that dab-odrmux will reject
+The IP address and port of the target are preconfigured to match the defaults on odr-dabmux. Remember that odr-dabmux will reject
 non-local connections, so it's unlikely you'll ever change the IP address from "127.0.0.1".
 
 **URL FORMAT**
@@ -49,7 +49,7 @@ will set the announcements cluster for station1 active.
 **FREQUENCY OF UPDATES**
 
 You should be careful when connecting this script up to a playout system which is capable of generating a lot of updates very quickly.
-The interface into dab-odrmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still
+The interface into odr-dabmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still
 running, it's likely to get blocked and held. Do that too much, and you'll end up with a lot of queued up scripts, and it will
 probably overwhelm the interface and cause it to hang.
 
@@ -75,7 +75,7 @@ the script.
   check when you're configuring that you've got station names and $announcement_command_suffix correctly.
 * The script has a 5 second time to deal with circumstances when the odr-dabmux interface has stalled. It's unlikely a local
   connection would ever be that slow, but be aware of this limitation.
-* There's no range checking on the input values. You can specify values for "active" which are currently invalid on dab-odrmux.
+* There's no range checking on the input values. You can specify values for "active" which are currently invalid on odr-dabmux.
 
 _(c) 2016 Nick Piggott_
 
