@@ -56,6 +56,8 @@ probably overwhelm the interface and cause it to hang.
 It's recommended to put some sort of state caching layer in between a playout source and this script so that this script is only
 called when a *change* of state is required, not just to asset the current state.
 
+There is a PHP script named "announcements-caching-function.php" with an example function of such a caching approach in this repo. 
+
 **HTTP RESPONSE CODES**
 
 The script will return 3 codes:
