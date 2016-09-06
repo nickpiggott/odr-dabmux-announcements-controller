@@ -1,8 +1,8 @@
 # odr-dabmux-announcements-controller
-A PHP Script to control announcements on odr-dabmux
+A PHP Script to control announcements on odr-dabmux (v1.1 or higher)
 
 odr-dabmux is a open source implementation of a multiplexer for DAB / DAB+ Digital Radio (based on EN 300 401). Since version 0.8.0,
-odr-dabmux has supported definition and control of announcement clusters. (See http://opendigitalradio.org)
+odr-dabmux has supported definition and control of announcement clusters. (See http://opendigitalradio.org).
 
 An HTTP server can be installed on the same machine as odr-dabmux, to host this PHP script. The HTTP must currently be on the same
 machine as odr-dabmux only allows local connections (127.0.0.1) to its interface. You might want to consider Apache or something
@@ -11,7 +11,8 @@ lighter. Please be sure to secure the HTTP server - this script has no inherent 
 **CONFIGURATION**
 
 You should read the documentation for odr-dabmux on how to configure the remote telnet interface (usually on port 12721) and how to
-configure announcement clusters for individual stations.
+configure announcement clusters for individual stations. You must be using v1.1 or greater of odr-dabmux, which has support for the
+start_in and stop_in attributes for announcement control.
 
 When creating the clusters, you should use a consistent naming structure of:
 
@@ -57,6 +58,13 @@ It's recommended to put some sort of state caching layer in between a playout so
 called when a *change* of state is required, not just to asset the current state.
 
 There is a PHP script named "announcements-caching-function.php" with an example function of such a caching approach in this repo. 
+
+**DE-BOUNCING**
+
+This script implements a process for dealing with playout systems that may momentarily send an event that would cause the flag to
+be set inactive and then active again in a short period of time. This causes an annoying effect on the receiver. This script
+waits 2 seconds before processing an inactive command, during which time a request to go active will prevent the inactive event
+happening.
 
 **HTTP RESPONSE CODES**
 

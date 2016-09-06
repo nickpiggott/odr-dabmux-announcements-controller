@@ -4,6 +4,8 @@
 $announcement_command_suffix = "_traffic_announcement";
 $announcement_directory = "announcements/";
 
+openlog("ODR-DabMux-Announcements",LOG_PID,LOG_SYSLOG);
+
 $active = ($_GET["active"]);
 $station = ($_GET["station"]);
 $delay = ($_GET["delay"]);
@@ -40,14 +42,20 @@ if ($http_code ==200) {
 	if ($active == false) {
 		$lock_handle = fopen($announcement_directory.$station."_ta_pending_inactive","c");
 		fclose($lock_handle);
+//	        syslog(LOG_INFO,"Created ".$station."_ta_pending_inactive file");
+
 		sleep(2);
+//	        syslog(LOG_INFO,"Checking ".$station."_ta_pending_inactive file");
 		if (!file_exists($announcement_directory.$station."_ta_pending_inactive")) {
-		    	$log_output = ("Announcements :" .$station." announcement set active 0 aborted as active 1 requested");
+//		        syslog(LOG_INFO,"Couldn't find ".$station."_ta_pending_inactive file");
+
+		    	$log_output = ("Announcements :" .$station." announcement set active 0 aborted as lockfile ".$station."_ta_pending_inactive removed");
 		    	syslog(LOG_ERR,$log_output);
 		    	exit($log_output);
 		} 
 	}
 
+ //       syslog(LOG_INFO,"Deleting ".$station."_ta_pending_inactive file");
 	unlink($announcement_directory.$station."_ta_pending_inactive"); 
 
 	$service_port = "12721";
