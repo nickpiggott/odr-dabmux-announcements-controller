@@ -31,38 +31,35 @@ on line 6 of the PHP script. So in this example, amend line 6 to read
 
   $announcement_command_suffix = "_announcement";
   
-The IP address and port of the target are preconfigured to match the defaults on odr-dabmux. Remember that odr-dabmux will reject
-non-local connections, so it's unlikely you'll ever change the IP address from "127.0.0.1".
+The IP address and port of the target are preconfigured to match the defaults on odr-dabmux. Remember that odr-dabmux will reject non-local connections, so it's unlikely you'll ever change the IP address from "127.0.0.1".
+
+You need to configure a value for $announcement_directory to allow the script to write flags and state. This must have read/writeable/delete access for the script.
 
 **URL FORMAT**
 
-You must pass two variables in the URL calling the script
+You must pass one variable in the URL calling the script
 
   * station = the name of the station who's announcement cluster you want to control
-  * active = the state you want to set the announcement cluster to. Values are either 0 (inactive) or 1 (active).
+  
+You may pass additional variables in the URL calling the script
+  * active = the state you want to set the announcement cluster to. Values are either 0 (inactive) or 1 (active). If missing, active is assumed = 0
+  * delay = the number of milliseconds to wait before changing the flag state in the FIC channel. This is to allow for audio buffering delays. If missing, delay is assumed = 0
   
 for example:
 
-  http://127.0.0.1/announcements.php?station=station1&active=1
+  http://127.0.0.1/announcements.php?station=station1&active=1&delay=3000
 
-will set the announcements cluster for station1 active.
+will set the announcements cluster for station1 active after a delay of 3 seconds.
 
 **FREQUENCY OF UPDATES**
 
-You should be careful when connecting this script up to a playout system which is capable of generating a lot of updates very quickly.
-The interface into odr-dabmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still
-running, it's likely to get blocked and held. Do that too much, and you'll end up with a lot of queued up scripts, and it will
-probably overwhelm the interface and cause it to hang.
+YThe interface into odr-dabmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still running, it's likely to get blocked and held. Do that too much, and you'll end up with a lot of queued up scripts, and it will probably overwhelm the interface and cause it to hang.
 
-It's recommended to put some sort of state caching layer in between a playout source and this script so that this script is only
-called when a *change* of state is required, not just to asset the current state.
-
-There is a PHP script named "announcements-caching-function.php" with an example function of such a caching approach in this repo. 
+The script tries to avoid overwhelming the interface by maintaining the current state of the traffic flag in a file in the $annoucements_directory. If the requested state is the same as the current state, the script will terminate early, without attaching to the odr-dabmux process.
 
 **DE-BOUNCING**
 
-This script implements a process for dealing with playout systems that may momentarily send an event that would cause the flag to
-be set inactive and then active again in a short period of time. This causes an annoying effect on the receiver. This script
+This script implements a process for dealing with playout systems that may momentarily send an event that would cause the flag to be set inactive and then active again in a short period of time. This causes an annoying effect on the receiver. This script
 waits 2 seconds before processing an inactive command, during which time a request to go active will prevent the inactive event
 happening.
 
@@ -78,6 +75,10 @@ The script will return 3 codes:
 There is a human readable HTML output to the script, so you can use it for debugging. Otherwise you can disregard the output of
 the script.
 
+**LOGGING**
+
+Output is logged to syslog.
+
 **KNOWN LIMITATIONS**
 
 * It's possible to specify a station name incorrectly. The multplexer will throw an error saying it doesn't recognise the
@@ -87,7 +88,7 @@ the script.
   connection would ever be that slow, but be aware of this limitation.
 * There's no range checking on the input values. You can specify values for "active" which are currently invalid on odr-dabmux.
 
-_(c) 2016 Nick Piggott_
+_(c) 2018 Nick Piggott_
 
 This is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as
