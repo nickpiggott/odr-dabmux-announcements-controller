@@ -27,7 +27,7 @@ You should confiure this common suffix in the variable
 
   $announcement_command_suffix
 
-on line 6 of the PHP script. So in this example, amend line 6 to read
+in the head of the PHP script. So in this example, amend the line to:
 
   $announcement_command_suffix = "_announcement";
   
@@ -53,7 +53,7 @@ will set the announcements cluster for station1 active after a delay of 3 second
 
 **FREQUENCY OF UPDATES**
 
-YThe interface into odr-dabmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still running, it's likely to get blocked and held. Do that too much, and you'll end up with a lot of queued up scripts, and it will probably overwhelm the interface and cause it to hang.
+The interface into odr-dabmux is blocking (not multi threaded), so if the script is called whilst another instance of it is still running, it's likely to get blocked and held. Do that too much, and you'll end up with a lot of queued up scripts, and it will probably overwhelm the interface and cause it to hang.
 
 The script tries to avoid overwhelming the interface by maintaining the current state of the traffic flag in a file in the $annoucements_directory. If the requested state is the same as the current state, the script will terminate early, without attaching to the odr-dabmux process.
 
