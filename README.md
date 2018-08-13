@@ -23,7 +23,7 @@ such as:
   * station1_announcement
   * station2_announcement
 
-You should confiure this common suffix in the variable
+You should configure this common suffix in the variable
 
   $announcement_command_suffix
 
@@ -84,7 +84,7 @@ Output is logged to syslog.
 * It's possible to specify a station name incorrectly. The multplexer will throw an error saying it doesn't recognise the
   announcement cluster specified, but the script will fail silently, indicating an update happened correctly. So double
   check when you're configuring that you've got station names and $announcement_command_suffix correctly.
-* The script has a 5 second time to deal with circumstances when the odr-dabmux interface has stalled. It's unlikely a local
+* The script has a 5 second timeout to deal with circumstances when the odr-dabmux interface has stalled. It's unlikely a local
   connection would ever be that slow, but be aware of this limitation.
 * There's no range checking on the input values. You can specify values for "active" which are currently invalid on odr-dabmux.
 
